@@ -15,8 +15,48 @@ from analyser import Form
 #  pip install requests
 #  pip install lxml
 
+def argumentieren(commandLine):
+    """
+    gets the value of all arguments on command line 
+
+    :param list: command line
+    :return: url, min and max values defined by the command line
+    """
+    # Define verbose
+    global verboseprint
+    verboseprint = print if ("-verbose" in sys.argv or "-v" in sys.argv) else lambda *a, **k: None
+    if "-v" in sys.argv: sys.argv.remove("-v")  
+    if "-verbose" in sys.argv: sys.argv.remove("-verbose")
+    
+    # Define min and max execution time
+    minValue = int(getArgumentValue(commandLine,"-min")) if "-min" in sys.argv else 1 #
+    maxValue = int(getArgumentValue(commandLine,"-max")) if "-max" in sys.argv else 300 #
+    
+    # Verifies the call format and return the argument values
+    if((len(commandLine) != 2) or (minValue > maxValue)):
+        print("Wrong call")
+        sys.exit(0)
+    return str(sys.argv[1]), minValue, maxValue
+
+def getArgumentValue(list, argument):
+    """
+    gets the value of an argument on a list 
+
+    :param list: list of arguments
+    :return: value of the specified argument
+    """
+    # Iterates to get argument and value
+    valueIndex = sys.argv.index(argument) + 1
+    argumentValue = sys.argv.pop(valueIndex) # argument value
+
+    # Remove the argument used 
+    sys.argv.remove(argument)
+
+    # Return the value
+    return argumentValue
+
 class WasteFlooding():
-    def __init__(self,url):        
+    def __init__(self, url, minTime, maxTime):        
         self.url = url
         self.r = self.bait(self.url)
         if self.r==False:
@@ -30,8 +70,10 @@ class WasteFlooding():
         self.scavenger(self.r.text,self.url)
         self.printAttackStructure() # --verbose
         self.countTime = 0
+        self.minTime = minTime
+        self.maxTime = maxTime
 
-    def randomString(self,stringLength=6):
+    def randomString(self, stringLength=6):
         """
         generates a random string 
 
@@ -41,7 +83,7 @@ class WasteFlooding():
         letters = string.ascii_lowercase
         return ''.join(random.choice(letters) for i in range(stringLength))
 
-    def bait(self,url):
+    def bait(self, url):
         """
         tests the first connection 
 
@@ -64,22 +106,22 @@ class WasteFlooding():
         else:
             return False
 
-    def generateValue(self,min,max):
+    def generateValue(self, minValue, maxValue):
         """
         generates the random value using validations, the only validation included now is CPF 
 
-        :param min: minimum string size
-        :param max: maximum string size
+        :param minValue: minimum string size
+        :param maxValue: maximum string size
         :return: random data
         """
-        if(max==11):
+        if(maxValue==11):
             cpf = [random.randint(0, 9) for x in range(9)]
             for _ in range(2):                                                          
                 val = sum([(len(cpf) + 1 - i) * v for i, v in enumerate(cpf)]) % 11                                                                              
                 cpf.append(11 - val if val > 1 else 0)
             return '%s%s%s%s%s%s%s%s%s%s%s' % tuple(cpf)
         else:
-            return random.randrange(10**(min-1),(10**(max))-1)
+            return random.randrange(10**(minValue-1),(10**(maxValue))-1)
 
     def flood(self):
         """
@@ -100,6 +142,7 @@ class WasteFlooding():
         #for index,form in enumerate(self.forms):
         #    outFile.append(open("output"+str(index)+".txt", "a+"))
 
+        print("Waste Flooding\n Random times "+str(self.minTime)+"-"+str(self.maxTime)+" seconds")
         for index,form in enumerate(self.forms):
             # Set pipes
             pipe80 = self.pipes[0][random.randrange(0,len(self.pipes[0]))]['ip'] + ':80'
@@ -140,14 +183,13 @@ class WasteFlooding():
                 print("|  ERROR") # --verbose
             
             # Define the min and max waiting time
-            timeWait = self.randomPause(5,300)
+            timeWait = self.randomPause()
             # outFile[index].write(str(pipe80)+";"+str(pipe80 in usedPipes)+";"+str(timeWait)+";"+str(clutter)+"\n")
             # outFileBase.write(str(pipe80)+";"+str(pipe80 in usedPipes)+";"+str(timeWait)+";"+str(clutter)+"\n")
             usedPipes.append(pipe80)
             self.countTime += timeWait
             if self.countTime > (3600*24):
                 quit()
-
     
     def getPipes(self):
         """
@@ -176,7 +218,7 @@ class WasteFlooding():
             for param in form.params:
                 verboseprint("|\t\t"+param+" - Range: "+str(form.params[param]))
             
-    def randomPause(self,min,max):
+    def randomPause(self):
         """
         Wait a random time on a defined range
 
@@ -184,7 +226,7 @@ class WasteFlooding():
         :param max: maximum waiting time (seconds)
         :return:
         """
-        timeWait = random.randrange(min,max)
+        timeWait = random.randrange(self.minTime,self.maxTime)
         print("Waiting "+str(timeWait)+" seconds")
         time.sleep(timeWait)
         return timeWait
@@ -213,21 +255,16 @@ class WasteFlooding():
                 text = r.text
                 url = self.forms[-1].actionUrl
         else:
-            return
-
+            return      
+        
+        
 if __name__ == '__main__':
     
-    # Define verbose
-    global verboseprint 
-    verboseprint = print if ("-verbose" in sys.argv or "-v" in sys.argv) else lambda *a, **k: None
-    if "-v" in sys.argv: sys.argv.remove("-v")  
-    if "-verbose" in sys.argv: sys.argv.remove("-verbose")
-
+    # Get all arguments
+    url, minTime, maxTime = argumentieren(sys.argv)
+    
     # Starts the waste object
-    if(len(sys.argv) != 2):
-        print("Wrong call")
-        sys.exit(0)
-    waste = WasteFlooding(str(sys.argv[1]))
+    waste = WasteFlooding(url, minTime, maxTime)
 
     # Starts the flooding
     while not waste.empty:
