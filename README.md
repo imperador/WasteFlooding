@@ -3,7 +3,7 @@ Phishing Retaliation Tool
 
 ## Requirements
   - Install [Python 3.7.4](https://www.python.org/downloads/) (last version)
-  - Pip will be installed as default
+  - Pip will be installed by default
   
 ### Install the following libraries using pip:
  ```python
