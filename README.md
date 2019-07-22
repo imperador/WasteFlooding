@@ -3,8 +3,9 @@ Phishing Retaliation Tool
 
 ## Requirements
   - Install [Python 3.7.4](https://www.python.org/downloads/) (last version)
-  - Pip will be installed as default
-#### Install the following libraries using pip:
+  - Pip will be installed by default
+  
+### Install the following libraries using pip:
  ```python
 pip install gevent
 pip install requests
@@ -17,16 +18,20 @@ To use the tool, just run the command from the starting folder (replacing URL wi
 python waste.py URL
 ```
 
-#### Verbose usage
+### Options
+#### -v or -verbose
 If you want to see the attack structure, just add "-v" or "-verbose" to your call:
  ```python
 python waste.py URL -v
-```
-OR
- ```python
 python waste.py URL -verbose
 ```
-
+#### -min and -max
+To define custom minimum and maximum waiting time, just add "-min" and/or "-max", respectively, followed by desired values (in seconds):
+ ```python
+python waste.py URL -min 0 -max 5000
+python waste.py URL -min 5
+python waste.py URL -max 5000
+```
 
 ## Big Thanks:
   - [Placidina](https://github.com/Placidina) for the [GetProxies](https://github.com/Placidina/GetProxies) - I am still integrating other calls on the tool, but I want to thank you in advance
