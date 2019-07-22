@@ -188,7 +188,7 @@ class WasteFlooding():
                 rWaste = requests.post(form.actionUrl, data=clutter, proxies=plumbing, headers=hdr)
                 status_code = rWaste.status_code
             finally:
-                status_code == "400"
+                status_code = "400"
                      
             # Attack information
             print('+ Proxy: '+ pipe80 + ' and ' + pipe443 + ' for ' + form.action) # --verbose
