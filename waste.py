@@ -8,7 +8,10 @@ import time
 import json
 import sys
 
+sys.path.append('proxies')
+from getproxies import GetProxies
 from analyser import Form
+from analyser import Arguments
 
 # Install the following libraries:
 #  pip install gevent
@@ -22,19 +25,30 @@ def argumentieren(commandLine):
     :param list: command line
     :return: url, min and max values defined by the command line
     """
-    # Define verbose
     global verboseprint
-    verboseprint = print if ("-verbose" in sys.argv or "-v" in sys.argv) else lambda *a, **k: None
-    if "-v" in sys.argv: sys.argv.remove("-v")  
-    if "-verbose" in sys.argv: sys.argv.remove("-verbose")
+
+    # Define verbose
+    verboseprint = print if (Arguments.VERBOSEFULL in sys.argv or Arguments.VERBOSE in sys.argv) else lambda *a, **k: None
+    if Arguments.VERBOSE in sys.argv: sys.argv.remove(Arguments.VERBOSE)  
+    if Arguments.VERBOSEFULL in sys.argv: sys.argv.remove(Arguments.VERBOSEFULL)
+    
+    # Define reset command
+    if Arguments.RESET in sys.argv:
+        vars = Namespace(aliveproxy=False, all=True, all_no=[], 
+                         check=False, checker=None, checkerproxy=False, 
+                         freeproxylist=False, gatherproxy=False, output='proxies\proxies.json', 
+                         proxyhttp=False, proxyiplist=False, proxynova=False)
+        resetProxies = GetProxies(vars)
+        sys.argv.remove(Arguments.RESET)
+        resetProxies.run()
     
     # Define min and max execution time
-    minValue = int(getArgumentValue(commandLine,"-min")) if "-min" in sys.argv else 1 #
-    maxValue = int(getArgumentValue(commandLine,"-max")) if "-max" in sys.argv else 300 #
+    minValue = int(getArgumentValue(commandLine,Arguments.MIN)) if Arguments.MIN in sys.argv else 1 #
+    maxValue = int(getArgumentValue(commandLine,Arguments.MAX)) if Arguments.MAX in sys.argv else minValue+300 #
     
     # Verifies the call format and return the argument values
     if((len(commandLine) != 2) or (minValue > maxValue)):
-        print("Wrong call")
+        print("No URL detected")
         sys.exit(0)
     return str(sys.argv[1]), minValue, maxValue
 
@@ -54,6 +68,11 @@ def getArgumentValue(list, argument):
 
     # Return the value
     return argumentValue
+
+class Namespace:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
 
 class WasteFlooding():
     def __init__(self, url, minTime, maxTime):        
@@ -197,7 +216,7 @@ class WasteFlooding():
 
         :return: a collection of proxies
         """
-        f = open("GetProxies/proxies.json", "r")
+        f = open("proxies/proxies.json", "r")
         if f:
             content = f.read()
             proxies = json.loads(content)

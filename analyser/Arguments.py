@@ -1,0 +1,5 @@
+MIN = "-min"
+MAX = "-max"
+VERBOSE = "-v"
+VERBOSEFULL = "-v"
+RESET = "-r"
