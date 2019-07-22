@@ -180,20 +180,22 @@ class WasteFlooding():
             # Send the Waste
             try:
                 rWaste = requests.post(form.actionUrl, data=clutter, proxies=plumbing, headers=hdr)
+                status_code = rWaste.status_code
             except requests.exceptions.ProxyError:
                 pipe80 = self.pipes[0][random.randrange(0,len(self.pipes))]['ip'] + ':80'
                 pipe443 = self.pipes[1][random.randrange(0,len(self.pipes))]['ip'] + ':443'
                 plumbing = dict([('http',pipe80), ('https',pipe443)])
                 rWaste = requests.post(form.actionUrl, data=clutter, proxies=plumbing, headers=hdr)
+                status_code = rWaste.status_code
             finally:
-                rWaste.status_code == "400"
+                status_code == "400"
                      
             # Attack information
             print('+ Proxy: '+ pipe80 + ' and ' + pipe443 + ' for ' + form.action) # --verbose
             print('|  Waste: '+str(clutter)) # --verbose
 
             # Shows the result            
-            if (rWaste.status_code == 200):
+            if (status_code == 200):
                 print("|  OK") # --verbose                
                 # output test
                 #outFile[index].write(str(pipe80)+";"+str(timeWait)+";"+str(clutter)+"\n")
