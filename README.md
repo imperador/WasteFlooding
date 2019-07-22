@@ -32,6 +32,12 @@ python waste.py URL -min 0 -max 5000
 python waste.py URL -min 5
 python waste.py URL -max 5000
 ```
+#### -r 
+To reset proxy list, just add "-r" as argument. You don't need to pass an URL if you only want to reset your proxy collection:
+ ```python
+python waste.py URL -r
+python waste.py -r
+```
 
 ## Big Thanks:
   - [Placidina](https://github.com/Placidina) for the [GetProxies](https://github.com/Placidina/GetProxies) - I am still integrating other calls on the tool, but I want to thank you in advance
