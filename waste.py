@@ -182,12 +182,6 @@ class WasteFlooding():
                 rWaste = requests.post(form.actionUrl, data=clutter, proxies=plumbing, headers=hdr)
                 status_code = rWaste.status_code
             except requests.exceptions.ProxyError:
-                pipe80 = self.pipes[0][random.randrange(0,len(self.pipes))]['ip'] + ':80'
-                pipe443 = self.pipes[1][random.randrange(0,len(self.pipes))]['ip'] + ':443'
-                plumbing = dict([('http',pipe80), ('https',pipe443)])
-                rWaste = requests.post(form.actionUrl, data=clutter, proxies=plumbing, headers=hdr)
-                status_code = rWaste.status_code
-            finally:
                 status_code = "400"
                      
             # Attack information
