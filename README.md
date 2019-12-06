@@ -49,7 +49,7 @@ python waste.py -r
 #### \[2019\] Waste Flooding: Ferramenta para Retaliação de Phishing 
 *Cristoffer Leite, João Gondim, Priscila Solis and Eduardo Alchieri*
 <br/> XIX Brazilian Symposium on Information and Computational Systems Security (SBSeg), 2019
-<br/>\[pdf\] \[bib\]
+<br/>[\[pdf\]](https://www.researchgate.net/publication/337679980_Waste_Flooding_Ferramenta_para_Retaliacao_de_Phishing) \[bib\]
 
 ## Big Thanks:
   - [Placidina](https://github.com/Placidina) for the [GetProxies](https://github.com/Placidina/GetProxies) - I am still integrating other calls on the tool, but I want to thank you in advance
