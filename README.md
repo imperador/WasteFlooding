@@ -44,7 +44,7 @@ python waste.py -r
 #### \[2019\] Waste Flooding: A Phishing Retaliation Tool 
 *Cristoffer Leite, João Gondim, Priscila Solis and Eduardo Alchieri*
 <br/> 18th IEEE International Symposium on Network Computing and Applications (NCA), 2019
-<br/>\[pdf\] \[bib\]
+<br/>[\[IEEE\]](https://ieeexplore.ieee.org/document/8935018) \[bib\]
 
 #### \[2019\] Waste Flooding: Ferramenta para Retaliação de Phishing 
 *Cristoffer Leite, João Gondim, Priscila Solis and Eduardo Alchieri*
